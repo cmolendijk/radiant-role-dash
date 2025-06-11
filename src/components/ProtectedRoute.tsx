@@ -1,8 +1,12 @@
 
-import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { Navigate } from 'react-router-dom';
 
-const Index = () => {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -13,12 +17,9 @@ const Index = () => {
     );
   }
 
-  // Redirect based on authentication status
-  if (user) {
-    return <Navigate to="/dashboard" replace />;
-  } else {
+  if (!user) {
     return <Navigate to="/auth" replace />;
   }
-};
 
-export default Index;
+  return <>{children}</>;
+};
